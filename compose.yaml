@@ -2,8 +2,13 @@ services:
   postgres:
     image: 'postgres:latest'
     environment:
-      - 'POSTGRES_DB=chessappdb'
-      - 'POSTGRES_PASSWORD=1234'
-      - 'POSTGRES_USER=raivydas'
+      - POSTGRES_USER=raivydas
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=chessappdb
+#      - .env
     ports:
       - '5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+volumes:
+  postgres-data:
