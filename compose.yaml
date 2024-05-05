@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=chessappdb'
+      - 'POSTGRES_PASSWORD=1234'
+      - 'POSTGRES_USER=raivydas'
+    ports:
+      - '5432:5432'
