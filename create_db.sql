@@ -2,7 +2,7 @@
 \c chessappdb;
 
 -- Create a table to store user information
-CREATE TABLE IF NOT EXISTS games (
+CREATE TABLE IF NOT EXISTS chess_game (
     id uuid PRIMARY KEY,
     white_player VARCHAR(20) NOT NULL,
     black_player VARCHAR(20) NOT NULL,

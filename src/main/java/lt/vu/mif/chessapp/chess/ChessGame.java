@@ -5,14 +5,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.relational.core.mapping.Table;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import java.time.Instant;
 import java.util.UUID;
 
-@Table("games")
+@Table("chess_games")
 public record ChessGame(
-        @Id @GeneratedValue(strategy = GenerationType.AUTO) UUID id,
+        @Id UUID id,
         String whitePlayer,
         String blackPlayer,
         String result,
