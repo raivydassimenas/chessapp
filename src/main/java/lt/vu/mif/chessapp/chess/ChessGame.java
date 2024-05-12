@@ -8,13 +8,13 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.time.Instant;
 import java.util.UUID;
 
-@Table("chess_games")
+@Table("chess_game")
 public record ChessGame(
         @Id UUID id,
         String whitePlayer,
         String blackPlayer,
         String result,
-        @CreatedDate Instant createdDate,
-        @LastModifiedDate Instant lastModified,
+//        @CreatedDate Instant createdDate,
+//        @LastModifiedDate Instant lastModified,
         String gameFile
 ) {}
