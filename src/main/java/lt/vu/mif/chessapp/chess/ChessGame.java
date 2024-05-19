@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Table("chess_game")
 public record ChessGame(
-        @Id UUID id,
+        @Id Long id,
         String whitePlayer,
         String blackPlayer,
         String result,

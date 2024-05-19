@@ -1,9 +1,9 @@
 -- Connect to the newly created database
-\c chessappdb;
+DROP TABLE IF EXISTS chess_game;
 
 -- Create a table to store user information
-CREATE TABLE IF NOT EXISTS chess_game (
-    id uuid PRIMARY KEY,
+CREATE TABLE chess_game (
+    id INT PRIMARY KEY,
     white_player VARCHAR(20) NOT NULL,
     black_player VARCHAR(20) NOT NULL,
     result VARCHAR(5) NOT NULL,

@@ -3,7 +3,9 @@ package lt.vu.mif.chessapp.chess;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,7 +28,7 @@ public class ChessController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ChessGame> getChessGameById(@PathVariable UUID id) {
+    public ResponseEntity<ChessGame> getChessGameById(@PathVariable Long id) {
         Optional<ChessGame> chessGame = chessGameRepository.findById(id);
         return chessGame.map(game -> new ResponseEntity<>(game, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
@@ -34,13 +36,15 @@ public class ChessController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public String createChessGame(@RequestBody ChessGame chessGame) {
-        Optional<ChessGame> chessGameOptional = Optional.of(chessGameRepository.save(chessGame));
-        return "Chess game created";
+    public ResponseEntity<Void> createChessGame(@RequestBody ChessGame chessGame, UriComponentsBuilder ucb) {
+        ChessGame savedChessGame = chessGameRepository.save(chessGame);
+
+        URI locationOfNewChessGame = ucb.path("/api/chessgame/{id}").buildAndExpand(savedChessGame.id()).toUri();
+        return ResponseEntity.created(locationOfNewChessGame).build();
     }
 
     @PutMapping("/{id}")
-    public String updateChessGame(@PathVariable UUID id, @RequestBody ChessGame chessGame) {
+    public String updateChessGame(@PathVariable Long id, @RequestBody ChessGame chessGame) {
         Optional<ChessGame> chessGameOptional = chessGameRepository.findById(id);
 
         if (chessGameOptional.isPresent()) {
@@ -53,7 +57,7 @@ public class ChessController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public String deleteChessGame(@PathVariable UUID id) {
+    public String deleteChessGame(@PathVariable Long id) {
         Optional<ChessGame> chessGameOptional = chessGameRepository.findById(id);
         if (chessGameOptional.isPresent()) {
             chessGameRepository.delete(chessGameOptional.get());
