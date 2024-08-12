@@ -8,7 +8,7 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.time.Instant;
 import java.util.UUID;
 
-@Table("chess_game")
+@Table("CHESS_GAME")
 public record ChessGame(
         @Id Long id,
         String whitePlayer,

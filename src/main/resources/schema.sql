@@ -1,8 +1,8 @@
 -- Connect to the newly created database
-DROP TABLE IF EXISTS chess_game;
+DROP TABLE IF EXISTS PUBLIC.CHESS_GAME;
 
 -- Create a table to store user information
-CREATE TABLE chess_game (
+CREATE TABLE PUBLIC.CHESS_GAME (
     id INT PRIMARY KEY,
     white_player VARCHAR(20) NOT NULL,
     black_player VARCHAR(20) NOT NULL,

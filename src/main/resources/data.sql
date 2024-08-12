@@ -1,1 +1,1 @@
-INSERT INTO chess_game (id, white_player, black_player, result, game_file) VALUES ('1', 'Alice', 'Bob', '1-0', 'game1.pgn');
+INSERT INTO PUBLIC.CHESS_GAME (id, white_player, black_player, result, game_file) VALUES ('1', 'Alice', 'Bob', '1-0', 'game1.pgn');
