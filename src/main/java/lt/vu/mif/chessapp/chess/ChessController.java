@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,14 +22,14 @@ public class ChessController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<ChessGame>> getChessGames() {
+    public ResponseEntity<List<ChessGame>> getChessGames() throws SQLException {
         List<ChessGame> chessGames = (List<ChessGame>) chessGameRepository.findAll();
         return new ResponseEntity<>(chessGames, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ChessGame> getChessGameById(@PathVariable Long id) {
+    public ResponseEntity<ChessGame> getChessGameById(@PathVariable Long id) throws SQLException {
         Optional<ChessGame> chessGame = chessGameRepository.findById(id);
         return chessGame.map(game -> new ResponseEntity<>(game, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
@@ -36,15 +37,15 @@ public class ChessController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> createChessGame(@RequestBody ChessGame chessGame, UriComponentsBuilder ucb) {
-        ChessGame savedChessGame = chessGameRepository.save(chessGame);
+    public ResponseEntity<Void> createChessGame(@RequestBody ChessGame chessGame, UriComponentsBuilder ucb) throws SQLException {
+        chessGameRepository.save(chessGame);
 
-        URI locationOfNewChessGame = ucb.path("/api/chessgame/{id}").buildAndExpand(savedChessGame.id()).toUri();
+        URI locationOfNewChessGame = ucb.path("/api/chessgame/{id}").buildAndExpand(chessGame.id()).toUri();
         return ResponseEntity.created(locationOfNewChessGame).build();
     }
 
     @PutMapping("/{id}")
-    public String updateChessGame(@PathVariable Long id, @RequestBody ChessGame chessGame) {
+    public String updateChessGame(@PathVariable Long id, @RequestBody ChessGame chessGame) throws SQLException {
         Optional<ChessGame> chessGameOptional = chessGameRepository.findById(id);
 
         if (chessGameOptional.isPresent()) {
@@ -57,10 +58,10 @@ public class ChessController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public String deleteChessGame(@PathVariable Long id) {
+    public String deleteChessGame(@PathVariable Long id) throws SQLException {
         Optional<ChessGame> chessGameOptional = chessGameRepository.findById(id);
         if (chessGameOptional.isPresent()) {
-            chessGameRepository.delete(chessGameOptional.get());
+            chessGameRepository.delete(id);
             return "Chess game deleted";
         } else {
             return "Chess game not found";
