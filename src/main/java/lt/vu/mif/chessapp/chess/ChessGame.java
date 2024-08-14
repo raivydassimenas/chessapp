@@ -8,10 +8,10 @@ import java.time.LocalDateTime;
 @Table("CHESS_GAME")
 public record ChessGame(
         @Id Long id,
-        String whitePlayer,
-        String blackPlayer,
+        String white_player,
+        String black_player,
         String result,
         LocalDateTime created,
         LocalDateTime updated,
-        String gameFile
+        String game_file
 ) {}

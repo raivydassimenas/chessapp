@@ -9,7 +9,6 @@ import java.net.URI;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/chessgame")
@@ -37,11 +36,13 @@ public class ChessController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> createChessGame(@RequestBody ChessGame chessGame, UriComponentsBuilder ucb) throws SQLException {
-        chessGameRepository.save(chessGame);
-
-        URI locationOfNewChessGame = ucb.path("/api/chessgame/{id}").buildAndExpand(chessGame.id()).toUri();
-        return ResponseEntity.created(locationOfNewChessGame).build();
+    public ResponseEntity<String> createChessGame(@RequestBody ChessGame chessGame) {
+        try {
+            chessGameRepository.save(chessGame);
+            return new ResponseEntity<>("Chess game created successfully", HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{id}")
@@ -49,7 +50,7 @@ public class ChessController {
         Optional<ChessGame> chessGameOptional = chessGameRepository.findById(id);
 
         if (chessGameOptional.isPresent()) {
-            chessGameRepository.save(chessGameOptional.get());
+            chessGameRepository.update(chessGameOptional.get());
             return "Chess game updated";
         } else {
             return "Chess game not found";
