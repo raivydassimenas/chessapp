@@ -14,4 +14,4 @@ public record ChessGame(
         LocalDateTime created,
         LocalDateTime updated,
         String game_file
-) {}
+) { }
