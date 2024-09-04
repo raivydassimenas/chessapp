@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 import java.time.LocalDateTime;
 
-@Table("CHESS_GAME")
+@Table("chess_game")
 public record ChessGame(
     @Id Long id,
     String whitePlayer,
