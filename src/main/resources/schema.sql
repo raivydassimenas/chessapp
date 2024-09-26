@@ -21,3 +21,10 @@ CREATE TABLE IF NOT EXISTS chess_game (
     game_file_id INT,
     FOREIGN KEY (game_file_id) REFERENCES CHESS_FILE(id)
 );
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    roles TEXT[]
+);
