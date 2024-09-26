@@ -5,7 +5,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.Set;
 
-@Table("users")
+@Table("user")
 public record User(
     @Id Long id,
     String username,
