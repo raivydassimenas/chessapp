@@ -23,7 +23,7 @@ public class ChessController {
   @GetMapping("")
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<List<ChessGame>> getChessGames() throws SQLException {
-    List<ChessGame> chessGames = chessService.getGameData();
+    List<ChessGame> chessGames = (List<ChessGame>) chessGameRepository.findAll();
     return new ResponseEntity<>(chessGames, HttpStatus.OK);
   }
 
