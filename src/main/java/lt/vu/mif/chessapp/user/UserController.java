@@ -26,14 +26,14 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest) {
-        User user = userService.registerUser(signupRequest.getUsername(), signupRequest.getPassword());
+        User user = userService.registerUser(signupRequest.username(), signupRequest.password());
         return ResponseEntity.ok("User registered successfully");
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+            new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password())
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
