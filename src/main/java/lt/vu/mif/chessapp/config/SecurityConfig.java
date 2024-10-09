@@ -9,7 +9,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.config.Customizer;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
@@ -19,12 +23,28 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-		.authorizeHttpRequests(authorize -> authorize
-				.anyRequest().authenticated()
-		)
-		.formLogin(withDefaults())
-		.httpBasic(withDefaults());
-	return http.build();
+            .cors() // Enable CORS
+            .and()
+            .authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/api/user/**").permitAll()    
+                .anyRequest().authenticated()
+            )
+            .formLogin(withDefaults())
+            .httpBasic(withDefaults());
+        return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(true);
+        configuration.addAllowedOrigin("*"); // Allow all origins, adjust as needed
+        configuration.addAllowedHeader("*"); // Allow all headers
+        configuration.addAllowedMethod("*"); // Allow all methods (GET, POST, etc.)
+        
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Apply to all endpoints
+        return source;
     }
 
     @Bean
