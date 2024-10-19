@@ -1,5 +1,7 @@
 package lt.vu.mif.chessapp.config;
 
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +15,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
+import org.springframework.security.config.http.SessionCreationPolicy;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -23,13 +26,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .cors() // Enable CORS
-            .and()
+            .cors(withDefaults())
+            .csrf(csrf -> csrf.disable())  // Disable CSRF for simplicity in this example
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/api/user/**").permitAll()    
+                .requestMatchers("/api/user/signup", "/api/user/login").permitAll()
                 .anyRequest().authenticated()
             )
-            .formLogin(withDefaults())
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
             .httpBasic(withDefaults());
         return http.build();
     }
@@ -37,13 +42,13 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Adjust as needed
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
-        configuration.addAllowedOrigin("*"); // Allow all origins, adjust as needed
-        configuration.addAllowedHeader("*"); // Allow all headers
-        configuration.addAllowedMethod("*"); // Allow all methods (GET, POST, etc.)
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); // Apply to all endpoints
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
